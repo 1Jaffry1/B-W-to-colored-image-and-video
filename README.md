@@ -22,7 +22,7 @@ This project provides a Python-based pipeline for colorizing black-and-white ima
 ## Installation
 
 ### Prerequisites
-- Python 3.8 or higher
+- Python 3.8 or higher (We used 3.11 / 3.13 will not word as PyTorch does not support it)
 - PyTorch
 - OpenCV
 - NumPy
@@ -74,19 +74,36 @@ project-root/
 ├── imgs/                  # Input black-and-white images
 ├── imgs_out/              # Output colorized images
 ├── input_vids/            # Input black-and-white videos. You need to create it.
-├── out_vids/              # Output colorized videos, Will be created at runtime
-├── models/                # Pre-trained models
-├── main.py                # Main script for colorization
+├── out_vids/              # Output colorized videos, will be created at runtime
+├── app.py                # Main script for colorization
 ├── colorizers/            # Custom module for model loading and preprocessing
+│   ├── __init__.py        # Just a bunch of imports
+│   ├── base_color.py      # Normalization and tensor conversion functions
+│   ├── eccv16.py          # ECCV16 model
+│   ├── siggraph17.py      # SIGGRAPH17 model
+│   ├── util.py            # Pre & Post processing functions
 ├── requirements.txt       # List of dependencies
 └── README.md              # This file
 ``` 
 ---
 
-For any questions or issues, please open an issue on the GitHub repository or contact the maintainers.
-```
-
 You can copy and paste this into a `README.md` file in your project directory. Let me know if you need further customization!
+
+## Image flow:
+1. We first convert the image to grayscale.
+2. We then resize the image to 256x256 pixels.
+3. We then normalize the image.
+4. We then convert the image to a tensor. (To be used by the `ECCV16`  model)
+5. We then pass the image through the model, which returns the colorized image.
+6. We then convert the colorized image to a numpy array.
+7. We then convert the numpy array to an image.
+8. We then save the colorized image.
+
+## Video flow:
+1. The video is read frame by frame.
+2. Each frame is colorized using the image flow. (Using the `SIGGRAPH17` model)
+3. The colorized frame is saved to the output video.
+
 
 
 ### Credits:
