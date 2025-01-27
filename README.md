@@ -104,6 +104,12 @@ You can copy and paste this into a `README.md` file in your project directory. L
 2. Each frame is colorized using the image flow. (Using the `SIGGRAPH17` model)
 3. The colorized frame is saved to the output video.
 
+Examples
+---
+Input:
+![alt text](imgs/ILSVRC2012_val_00041580.JPEG)
+Output:
+![alt text](imgs_out/ILSVRC2012_val_00041580.JPEG)
 
 
 ### Credits:

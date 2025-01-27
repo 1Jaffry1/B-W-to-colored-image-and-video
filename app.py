@@ -100,24 +100,46 @@ if __name__ == "__main__":
     out_vids = "out_vids"
 
     # Ensure output directories exist
-    for directory in [vids_path, out_vids, out_images]:
+    for directory in [vids_path, out_vids, out_images, images_path]:
         if not os.path.exists(directory):
             os.makedirs(directory)
 
     if args.mode in ["images", None]:
+        bw_images_path = "imgs_bw"  # Define the directory for grayscale images
+
+        # Ensure the grayscale images directory exists
+        if not os.path.exists(bw_images_path):
+            os.makedirs(bw_images_path)
+
         # Process all images in the input directory
-        for im_path in os.listdir(images_path): # loop through all files in the input images directory
-            full_im_path = os.path.join(images_path, im_path) # get the full path of the image
-            if im_path.lower().endswith(('.png', '.jpg', '.jpeg', '.bmp', '.tiff')): # check if the file is an image (just in case)
-                print(f"Processing image: {full_im_path}") # print the path of the image
+        for im_path in os.listdir(images_path):  # loop through all files in the input images directory
+            full_im_path = os.path.join(images_path, im_path)  # get the full path of the image
+            if im_path.lower().endswith(('.png', '.jpg', '.jpeg', '.bmp', '.tiff')):  # check if the file is an image (just in case)
+                print(f"Processing image: {full_im_path}")  # print the path of the image
                 try:
-                    img_result = colorize_image(full_im_path, colorizer_siggraph17, use_gpu=args.use_gpu) # colorize the image using the SIGGRAPH17 model
-                    output_path = os.path.join(out_images, os.path.basename(im_path)) # define the output path
-                    cv2.imwrite(output_path, cv2.cvtColor(img_result, cv2.COLOR_RGB2BGR)) # save the colorized image to the output path
-                    print(f"Image saved: {output_path}") # print? success!
-                
+                    # Load the image and convert it to grayscale
+                    img = load_img(full_im_path)
+                    if img is None:
+                        raise ValueError(f"Failed to load image from path: {full_im_path}")
+
+                    img_l, _ = preprocess_img(img)  # Extract the L channel for grayscale
+                    img_l_np = img_l.numpy()  # Convert PyTorch tensor to NumPy array
+                    img_bw = np.clip(img_l_np * 255, 0, 255).astype('uint8')  # Convert grayscale to uint8
+                    bw_output_path = os.path.join(bw_images_path, os.path.basename(im_path))  # Define the output path for grayscale
+                    cv2.imwrite(bw_output_path, img_bw)  # Save the grayscale image
+                    print(f"Black and white image saved: {bw_output_path}")
+
+                    # Colorize the image
+                    img_result = colorize_image(full_im_path, colorizer_siggraph17, use_gpu=args.use_gpu)  # Colorize the image
+                    output_path = os.path.join(out_images, os.path.basename(im_path))  # Define the output path for colorized images
+                    img_result_bgr = np.clip(img_result * 255, 0, 255).astype('uint8')  # Convert colorized image to uint8
+                    cv2.imwrite(output_path, cv2.cvtColor(img_result_bgr, cv2.COLOR_RGB2BGR))  # Save the colorized image
+                    print(f"Colorized image saved: {output_path}")  # Print success!
+
                 except Exception as e:
                     print(f"Error processing {full_im_path}: {e}")
+
+
 
     if args.mode in ["videos", None]: # if the mode is videos or not specified
         # Process all videos in the input directory
