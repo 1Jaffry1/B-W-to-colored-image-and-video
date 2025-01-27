@@ -47,6 +47,14 @@ This project provides a Python-based pipeline for colorizing black-and-white ima
 Models are included in the `models` directory.
 
 ## Usage
+### Use GUI: 
+Run the gui.py file:
+```bash
+python gui.py
+```
+- Select the image  you want to colorize.
+- Select the model you want to use.
+- Click on the "Start" button to colorize the image .
 
 ### Colorizing Images
 To colorize images **only**, place your black-and-white images in the `imgs/` directory and run the following command:
