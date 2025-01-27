@@ -3,4 +3,7 @@ scikit-image
 numpy
 matplotlib
 argparse
-
+ipython
+pillow
+opencv-python
+tkvideo
