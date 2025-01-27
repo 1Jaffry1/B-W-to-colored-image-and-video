@@ -3,16 +3,6 @@
 
 This project provides a Python-based pipeline for colorizing black-and-white images and videos using pre-trained deep learning models. The models used are `eccv16` (faster but less accurate) and `siggraph17` (slower but more accurate). The project is built using PyTorch, OpenCV, and other standard libraries.
 
-## Table of Contents
-1. [Features](#features)
-2. [Installation](#installation)
-3. [Usage](#usage)
-   - [Colorizing Images](#colorizing-images)
-   - [Colorizing Videos](#colorizing-videos)
-4. [Models](#models)
-5. [Directory Structure](#directory-structure)
-6. [License](#license)
-
 ## Features
 - Colorize black-and-white images with high accuracy using the `siggraph17` model.
 - Colorize videos efficiently using the `eccv16` model.
